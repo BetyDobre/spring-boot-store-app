@@ -22,4 +22,8 @@ public class Cart {
 
     @Column(name = "totalAmount")
     private double totalAmount;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customerId")
+    private Customer customer;
 }

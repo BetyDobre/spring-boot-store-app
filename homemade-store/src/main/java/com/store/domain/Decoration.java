@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -28,4 +29,7 @@ public class Decoration {
 
     @Column(name = "description")
     private String description;
+
+    @OneToMany(mappedBy = "decoration", cascade = CascadeType.ALL)
+    private List<OrderItem> orderItems;
 }

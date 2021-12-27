@@ -27,7 +27,11 @@ public class OrderItem {
     private double price;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "orders")
+    @JoinColumn(name = "orderId")
     @JsonIgnore
     private Order orders;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "decorationId")
+    private Decoration decoration;
 }

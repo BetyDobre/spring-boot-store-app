@@ -30,4 +30,11 @@ public class Order {
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "bankAccountCVV")
+    private BankAccount bankAccount;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customerId")
+    private Customer customer;
 }
