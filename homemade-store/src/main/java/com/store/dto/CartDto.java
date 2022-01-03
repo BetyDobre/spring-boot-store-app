@@ -13,4 +13,5 @@ public class CartDto {
 
     private Long cartId;
     private double totalAmount;
+    private Long customerId;
 }
