@@ -16,14 +16,11 @@ import java.util.List;
 @Table(name = "bankAccounts")
 public class BankAccount {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bankAccountCVV;
-
     @Column(name = "cardNumber")
     private String cardNumber;
 
-    @Column(name = "accountNumber")
-    private String accountNumber;
+    @Column(name = "bankAccountCVV")
+    private int bankAccountCVV;
 
     @Column(name = "balance")
     private double balance;
@@ -31,7 +28,7 @@ public class BankAccount {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bankAccount")
     private List<Order> orders;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "customerId")
     private Customer customer;
 }

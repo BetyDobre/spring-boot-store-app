@@ -38,4 +38,8 @@ public class CustomerService {
 
         return customers.stream().map(c -> customerMapper.mapToDto(c)).collect(Collectors.toList());
     }
+
+    public Customer findCustomerByCustomerId(Long customerId) {
+        return customerRepository.findCustomerByCustomerId(customerId);
+    }
 }

@@ -24,6 +24,10 @@ public class DecorationService {
         this.decorationMapper = decorationMapper;
     }
 
+    public Decoration findDecorationByDecorationId(Long decorationId){
+        return decorationRepository.findDecorationByDecorationId(decorationId);
+    }
+
     public DecorationDto add(DecorationDto decorationDto, String category) {
         Decoration decoration = decorationMapper.mapToEntity(decorationDto);
         if(category.equalsIgnoreCase("CHRISTMAS")){

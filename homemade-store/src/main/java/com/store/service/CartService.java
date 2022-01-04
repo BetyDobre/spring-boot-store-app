@@ -127,4 +127,8 @@ public class CartService {
             throw new EmptyCartException(customerId);
         else return cartItems.get(customerId);
     }
+
+    public void resetCart(Cart cart) {
+        cartRepository.delete(cart);
+    }
 }

@@ -34,4 +34,10 @@ public class OrderItem {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "decorationId")
     private Decoration decoration;
+
+    public OrderItem(int quantity, double price, Decoration decoration) {
+        this.quantity = quantity;
+        this.price = price;
+        this.decoration = decoration;
+    }
 }

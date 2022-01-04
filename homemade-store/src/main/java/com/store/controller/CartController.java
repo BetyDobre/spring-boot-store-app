@@ -2,10 +2,7 @@ package com.store.controller;
 
 import com.store.domain.Cart;
 import com.store.domain.Customer;
-import com.store.dto.CartDto;
-import com.store.dto.CustomerDto;
-import com.store.dto.DecorationDto;
-import com.store.dto.OrderItemDto;
+import com.store.dto.*;
 import com.store.mapper.CustomerMapper;
 import com.store.service.CartService;
 import com.store.service.CustomerService;
@@ -93,5 +90,13 @@ public class CartController {
         return ResponseEntity
                 .ok()
                 .body(cartService.getCartContent(customerId));
+    }
+
+    @PostMapping("/checkout/{customerId}")
+    public ResponseEntity<OrderDto> checkout(@PathVariable Long customerId, @RequestParam String cardNumber) {
+        return ResponseEntity
+                .ok()
+                .body(orderService.createOrder(customerId, cartService.getCartItems().get(customerId), cardNumber));
+
     }
 }
