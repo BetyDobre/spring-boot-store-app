@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Builder
@@ -15,11 +18,18 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class OrderDto {
 
+    @NotNull
     private Long orderId;
+
+    @NotNull
     private double totalAmount;
+
+    @NotEmpty
     private LocalDateTime orderPlaced;
+
     @JsonIgnore
     private Customer customer;
+
     @JsonIgnore
     private BankAccount bankAccount;
 }
