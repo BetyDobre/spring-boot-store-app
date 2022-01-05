@@ -43,6 +43,8 @@ public class OrderService {
         this.orderMapper = orderMapper;
     }
 
+    public Order findOrderByOrderId(Long orderId){ return orderRepository.findOrderByOrderId(orderId);}
+
     public OrderDto createOrder(Long customerId, List<OrderItemDto> orderItemDtos, String cardNumber) {
         Customer customer = customerService.findCustomerByCustomerId(customerId);
 
