@@ -2,6 +2,7 @@ package com.store.controller;
 
 import com.store.dto.CustomerDto;
 import com.store.service.CustomerService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@Api(value = "/customers", tags = "Customers")
 @RequestMapping("/customers")
 public class CustomerController {
     @Autowired
@@ -22,6 +24,12 @@ public class CustomerController {
     }
 
     @PostMapping
+    @ApiOperation(value = "Create a new customer",
+            notes = "Creates a new customer based on the information received in the request")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "The customer was successfully created based on the received request"),
+            @ApiResponse(code = 400, message = "Validation error on the received request")
+    })
     public ResponseEntity<CustomerDto> createCustomer(@RequestBody CustomerDto customerDto) {
         return ResponseEntity
                 .ok()
@@ -29,7 +37,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "Get Customer", notes = "Get a Customer based on the Id received in the request")
+    @ApiOperation(value = "Get a customer", notes = "Get a customer based on the Id received in the request")
     @ApiResponses(value = {@ApiResponse(code = 404, message = "Customer with the entered Id does not exist")})
     public ResponseEntity<CustomerDto> get(@PathVariable Long id) {
         if (service.getOne(id) == null) {
@@ -43,6 +51,8 @@ public class CustomerController {
     }
 
     @GetMapping
+    @ApiOperation(value = "Get all customers", notes = "Get all customers from the database")
+    @ApiResponses(value = {@ApiResponse(code = 400, message = "Validation error on the received request")})
     public ResponseEntity<List<CustomerDto>> getAll(){
         return ResponseEntity
                 .ok()
