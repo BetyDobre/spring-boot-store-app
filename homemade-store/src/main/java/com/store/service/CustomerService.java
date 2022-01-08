@@ -26,7 +26,7 @@ public class CustomerService {
     public CustomerDto create(CustomerDto customerDto) {
         Customer customer = customerMapper.mapToEntity(customerDto);
         Customer savedCustomer = customerRepository.save(customer);
-        return  customerMapper.mapToDto(savedCustomer);
+        return customerMapper.mapToDto(savedCustomer);
     }
 
     public CustomerDto getOne(Long id) {
