@@ -33,7 +33,7 @@ public class DecorationController {
             @ApiResponse(code = 200, message = "The decoration was successfully created based on the received request"),
             @ApiResponse(code = 400, message = "Validation error on the received request")
     })
-    public ResponseEntity<DecorationDto> addDecoaration(@RequestBody DecorationDto decorationDto, @PathVariable String category) {
+    public ResponseEntity<DecorationDto> addDecoration(@RequestBody DecorationDto decorationDto, @PathVariable String category) {
         return ResponseEntity
                 .ok()
                 .body(service.add(decorationDto, category));
