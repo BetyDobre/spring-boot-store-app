@@ -36,3 +36,9 @@ A client can:
 <br />
 
 The main 5 features for the MVP would refer to the ability to add new customers, to visualize all the products, to add products in the shopping cart, to delete products from the cart and to place a new order. 
+
+<br />
+
+Database ERD:
+<br />
+<a href="url"><img src="homemade-store-erd.jpeg" height="300" width="600"></a>
