@@ -20,13 +20,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
-    @Autowired
     private final CustomerService customerService;
-    @Autowired
     private final BankAccountService bankAccountService;
-    @Autowired
     private final CartService cartService;
-    @Autowired
     private final DecorationService decorationService;
 
     private final OrderRepository orderRepository;

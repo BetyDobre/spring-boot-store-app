@@ -4,7 +4,6 @@ import com.store.domain.Customer;
 import com.store.dto.CustomerDto;
 import com.store.mapper.CustomerMapper;
 import com.store.repository.CustomerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +12,7 @@ import java.util.stream.Collectors;
 @Service
 public class CustomerService {
 
-    @Autowired
     private final CustomerRepository customerRepository;
-
     private final CustomerMapper customerMapper;
 
     public CustomerService(CustomerRepository repository, CustomerMapper customerMapper) {

@@ -8,7 +8,6 @@ import com.store.exception.CustomerNotFoundException;
 import com.store.exception.DuplicateCardNumberException;
 import com.store.mapper.BankAccountMapper;
 import com.store.repository.BankAccountRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class BankAccountService {
-    @Autowired
     private final BankAccountRepository bankAccountRepository;
     private final CustomerService customerService;
     private final BankAccountMapper bankAccountMapper;

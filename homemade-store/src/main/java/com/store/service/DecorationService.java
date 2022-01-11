@@ -5,7 +5,6 @@ import com.store.domain.DecorationCategory;
 import com.store.dto.DecorationDto;
 import com.store.mapper.DecorationMapper;
 import com.store.repository.DecorationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,9 +13,7 @@ import java.util.stream.Collectors;
 @Service
 public class DecorationService {
 
-    @Autowired
     private final DecorationRepository decorationRepository;
-
     private final DecorationMapper decorationMapper;
 
     public DecorationService(DecorationRepository decorationRepository, DecorationMapper decorationMapper) {
