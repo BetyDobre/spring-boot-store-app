@@ -67,11 +67,11 @@ public class DecorationController {
 
 
     @GetMapping
-    public String getAllProducts(@RequestParam(required = false) String category, @RequestParam(required = false) String name, @RequestParam(required = false) boolean order,
+    public String getAllProducts(@RequestParam(required = false) String category, @RequestParam(required = false) String name, @RequestParam(required = false) String order,
                                  Model model, @RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size) {
 
         int currentPage = page.orElse(1);
-        int pageSize = size.orElse(6);
+        int pageSize = size.orElse(4);
         Page<Decoration> decorationPage = decorationService.getDecorationsBy(category, name, order, PageRequest.of(currentPage - 1, pageSize));
         model.addAttribute("decorationPage", decorationPage);
         int totalPages = decorationPage.getTotalPages();

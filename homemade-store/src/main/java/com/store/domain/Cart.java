@@ -23,7 +23,7 @@ public class Cart {
     @Column(name = "totalAmount")
     private double totalAmount;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne
     @JoinColumn(name = "customerId")
     private Customer customer;
 }

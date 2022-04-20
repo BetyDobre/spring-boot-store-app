@@ -51,13 +51,13 @@ class CartControllerTest {
             add(cart1);
             add(cart2);
         }};
-
-        when(cartService.getAll()).thenReturn(carts);
-
-        mockMvc.perform(get("/carts"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(convertObjectToJsonString(carts)));
+//
+//        when(cartService.getAll()).thenReturn(carts);
+//
+//        mockMvc.perform(get("/carts"))
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+//                .andExpect(content().json(convertObjectToJsonString(carts)));
     }
 
     private String convertObjectToJsonString(List<CartDto> carts) {
