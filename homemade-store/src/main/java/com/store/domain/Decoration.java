@@ -34,4 +34,7 @@ public class Decoration {
 
     @OneToMany(mappedBy = "decoration", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
+
+    @Lob
+    private Byte[] image;
 }

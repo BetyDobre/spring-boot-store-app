@@ -45,7 +45,7 @@ class DecorationControllerTest {
         //Arrange
         DecorationDto decorationDto = aDecorationDto(1L);
         String category = "christmas";
-        when(decorationService.add(any(), any())).thenReturn(decorationDto);
+        //when(decorationService.add(any(), any())).thenReturn(decorationDto);
 
         //Act
         MvcResult result = mockMvc.perform(post("/decorations/" +category)
@@ -62,7 +62,7 @@ class DecorationControllerTest {
     void test_getOneDecoration() throws Exception {
         Long id = Long.valueOf(2);
         DecorationDto dto = aDecorationDto(id);
-        when(decorationService.getOne(id)).thenReturn(dto);
+        //when(decorationService.getOne(id)).thenReturn(dto);
 
         mockMvc.perform(get("/decorations/"+id))
                 .andExpect(status().isOk())
@@ -82,7 +82,7 @@ class DecorationControllerTest {
             add(dto2);
         }};
 
-        when(decorationService.getByCategory(category)).thenReturn(decorationDtos);
+        //when(decorationService.getByCategory(category)).thenReturn(decorationDtos);
 
         mockMvc.perform(get("/decorations/filter/" + category))
                 .andExpect(status().isOk())

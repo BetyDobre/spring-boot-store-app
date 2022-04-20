@@ -90,7 +90,7 @@ public class CartService {
     }
 
     public List<OrderItemDto> deleteItemFromCart(Cart cart, Long customerId, Long decorationId) {
-        decorationService.getOne(decorationId);
+        //decorationService.getOne(decorationId);
 
         List<OrderItemDto> items = cartItems.get(customerId);
 

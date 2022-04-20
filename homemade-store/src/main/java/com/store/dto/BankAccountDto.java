@@ -24,11 +24,9 @@ public class BankAccountDto {
     @OnlyDigitsAndSpaces
     private String cardNumber;
 
-    @NotNull
     @Size(min = 3, max = 3)
     private int bankAccountCVV;
 
-    @NotNull
     @OnlyDigits
     @Size(min = 1)
     private double balance;

@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -18,10 +19,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class OrderDto {
 
-    @NotNull
     private Long orderId;
 
-    @NotNull
+    @Min(0)
     private double totalAmount;
 
     @NotEmpty

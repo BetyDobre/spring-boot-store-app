@@ -1,101 +1,92 @@
 package com.store.controller;
 
+import com.store.domain.Decoration;
 import com.store.domain.DecorationCategory;
 import com.store.dto.DecorationDto;
 import com.store.service.DecorationService;
+import com.store.service.ImageService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-@RestController
+@Controller
 @Api(value = "/decorations", tags = "Decorations")
 @RequestMapping("/decorations")
 public class DecorationController {
 
-    @Autowired
-    private final DecorationService service;
+    private final DecorationService decorationService;
+    private final ImageService imageService;
 
-    public DecorationController(DecorationService service) {
-        this.service = service;
+    public DecorationController(DecorationService service, ImageService imageService) {
+        this.decorationService = service;
+        this.imageService = imageService;
     }
 
+    @RequestMapping("/new")
+    public String newDecoration(Model model){
+        List<DecorationCategory> categories = Arrays.asList(DecorationCategory.values());
+        model.addAttribute("decorationDto", new DecorationDto());
+        model.addAttribute("categories", categories);
+        return "decorationForm";
+    }
 
-    @PostMapping("/{category}")
-    @ApiOperation(value = "Create a decoration",
-            notes = "Create a new decoration based on the information received in the request in a specific category")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "The decoration was successfully created based on the received request"),
-            @ApiResponse(code = 400, message = "Validation error on the received request")
-    })
-    public ResponseEntity<DecorationDto> addDecoration(@RequestBody DecorationDto decorationDto, @PathVariable String category) {
-        return ResponseEntity
-                .ok()
-                .body(service.add(decorationDto, category));
+    @PostMapping
+    public String saveOrUpdateDecorations(@Valid @ModelAttribute DecorationDto decorationDto,
+                               BindingResult bindingResult,
+                               @RequestParam("imagefile") MultipartFile file){
+        if (bindingResult.hasErrors()){
+            System.out.println(bindingResult.getAllErrors());
+            return "decorationForm";
+        }
+
+        Decoration savedDecoration = decorationService.save(decorationDto);
+        imageService.saveImageFile(Long.valueOf(savedDecoration.getDecorationId()), file);
+
+        return "redirect:/decorations";
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "Get a decoration",
-            notes = "Get a decoration based on the Id received in the request")
-    @ApiResponses(value = {
-            @ApiResponse(code = 404, message = "The decoration with the entered Id does not exist!")
-    })
-    public ResponseEntity<DecorationDto> get(@PathVariable Long id) {
-        if (service.getOne(id) == null) {
-            return ResponseEntity
-                    .notFound()
-                    .build();
-        }
-        return ResponseEntity
-                .ok()
-                .body(service.getOne(id));
+    public String getById(@PathVariable Long id, Model model) {
+        Decoration decorationFound = decorationService.findDecorationByDecorationId(id);
+        model.addAttribute("decoration", decorationFound);
+        return "decorationDetails";
     }
 
-    @GetMapping("/filter/{category}")
-    @ApiOperation(value = "Get decorations from a specific category",
-            notes = "Get decorations from a specific category received in the request")
-    @ApiResponses(value = {
-            @ApiResponse(code = 404, message = "The decorations with the entered category don't exist!")
-    })
-    public ResponseEntity<List<DecorationDto>> getDecorationByCategory(@PathVariable DecorationCategory category) {
-        if (service.getByCategory(category) == null) {
-            return ResponseEntity
-                    .notFound()
-                    .build();
-        }
-        return ResponseEntity
-                .ok()
-                .body(service.getByCategory(category));
-    }
 
     @GetMapping
-    @ApiOperation(value = "Get all decorations",
-            notes = "Get all decorations from the database")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "The data was retrieved successfully"),
-            @ApiResponse(code = 404, message = "No decorations were found")
-    })
-    public ResponseEntity<List<DecorationDto>> getAll(){
-        return ResponseEntity
-                .ok()
-                .body(service.getAllDecorations());
+    public String getAllProducts(@RequestParam(required = false) String category, @RequestParam(required = false) String name, @RequestParam(required = false) boolean order,
+                                 Model model, @RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size) {
+
+        int currentPage = page.orElse(1);
+        int pageSize = size.orElse(6);
+        Page<Decoration> decorationPage = decorationService.getDecorationsBy(category, name, order, PageRequest.of(currentPage - 1, pageSize));
+        model.addAttribute("decorationPage", decorationPage);
+        int totalPages = decorationPage.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+        return "decorations";
     }
 
-    @PutMapping("/{id}")
-    @ApiOperation(value = "Edit a decoration",
-            notes = "Modify data for a specific decorations based on the Id received in the request")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "The data was retrieved successfully"),
-            @ApiResponse(code = 404, message = "Decoration with the entered id was not found")
-    })
-    public ResponseEntity<DecorationDto> update(@RequestBody DecorationDto decorationDto, @PathVariable Long id) {
-        return ResponseEntity
-                .ok()
-                .body(service.update(decorationDto, id));
+    @RequestMapping("/delete/{id}")
+    public String deleteById(@PathVariable String id){
+        decorationService.deleteById(Long.valueOf(id));
+        return "redirect:/decorations";
     }
 }

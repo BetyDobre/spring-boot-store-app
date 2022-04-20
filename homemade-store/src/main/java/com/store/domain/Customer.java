@@ -1,12 +1,13 @@
 package com.store.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
+
+
+
+import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.enabled;
 
 @Builder
 @AllArgsConstructor
@@ -41,4 +42,21 @@ public class Customer {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Order> orders;
 
+    @Singular
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinTable(name = "roles", joinColumns = @JoinColumn(name = "customerId", referencedColumnName = "customerId"),
+            inverseJoinColumns = @JoinColumn(name="roleId", referencedColumnName = "roleId"))
+    private List<Role> roles;
+
+    @Builder.Default
+    private Boolean enabled = true;
+
+    @Builder.Default
+    private Boolean accountNotExpired = true;
+
+    @Builder.Default
+    private Boolean accountNotLocked = true;
+
+    @Builder.Default
+    private Boolean credentialsNotExpired = true;
 }
