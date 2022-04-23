@@ -30,7 +30,10 @@
                 <a class="nav-link" href="/login">Login</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/createAccount">Sing up</a>
+                <a class="nav-link" href="/register">Sing up</a>
+            </li>
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link" href="/customers">Customers</a>
             </li>
         </ul>
     </div>

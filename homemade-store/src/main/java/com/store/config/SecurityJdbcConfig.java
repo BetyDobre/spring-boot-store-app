@@ -20,18 +20,6 @@ public class SecurityJdbcConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.jdbcAuthentication()
-//                    .dataSource(dataSource)
-//                    .usersByUsernameQuery("select username,password,enabled "
-//                            + "from customer "
-//                            + "where username = ?")
-//                    .authoritiesByUsernameQuery("select username, authority "
-//                            + "from authorities "
-//                            + "where username = ?");
-//        }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http

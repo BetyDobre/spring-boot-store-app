@@ -2,9 +2,12 @@ package com.store.controller;
 
 import com.store.domain.*;
 import com.store.domain.security.Authority;
+import com.store.domain.security.User;
 import com.store.dto.CustomerDto;
 import com.store.mapper.CustomerMapper;
+import com.store.repository.security.AuthorityRepository;
 import com.store.service.CustomerService;
+import com.store.service.security.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,11 +25,15 @@ public class CustomerController {
     private final CustomerService customerService;
     private final CustomerMapper customerMapper;
     private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
+    private final AuthorityRepository authorityRepository;
 
-    public CustomerController(CustomerService customerService, CustomerMapper customerMapper, PasswordEncoder passwordEncoder) {
+    public CustomerController(CustomerService customerService, CustomerMapper customerMapper, PasswordEncoder passwordEncoder, UserService userService, AuthorityRepository authorityRepository) {
         this.customerService = customerService;
         this.customerMapper = customerMapper;
         this.passwordEncoder = passwordEncoder;
+        this.userService = userService;
+        this.authorityRepository = authorityRepository;
     }
 
     @GetMapping("/access_denied")
@@ -60,12 +67,14 @@ public class CustomerController {
         }
 
         Customer customer = customerMapper.mapToEntity(customerDto);
-        Set<Authority> authorities = new HashSet<>();
-        //authorities.add(roleRepository.findRoleByRoleId(1L));
-//        customer.setRoles(authorities);
-//        customer.setEnabled(true);
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+        customer.setEnabled(1);
         customerService.register(customer);
+
+        Set<Authority> authorities = new HashSet<>();
+        authorities.add(authorityRepository.findAuthorityByRole("ROLE_CUSTOMER"));
+        User user = new User(customer.getCustomerId(), customer.getUsername(), customer.getPassword(), authorities, true, true, true, true);
+        userService.save(user);
 
         ModelAndView model= new ModelAndView("login");
 
@@ -73,7 +82,7 @@ public class CustomerController {
     }
 
     @GetMapping("/customers")
-    public ModelAndView getCustomers(Principal principal) {
+    public ModelAndView getCustomers() {
         ModelAndView modelAndView = new ModelAndView("customers");
         List<Customer> customers = customerService.getAllCustomers();
         modelAndView.addObject("customers", customers);
@@ -98,19 +107,20 @@ public class CustomerController {
     }
 
     @PostMapping("/customers/update")
-    public String updateDecoration(@Valid @ModelAttribute Customer customer,
+    @Transactional
+    public String updateCustomer(@Valid @ModelAttribute Customer customer,
                                    BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             System.out.println(bindingResult.getAllErrors());
             return "updateCustomerForm";
         }
 
-        Set<Authority> authorities = new HashSet<>();
-       // authorities.add(roleRepository.findRoleByRoleId(1L));
-//        customer.setRoles(authorities);
-//        customer.setEnabled(true);
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
-        customerService.register(customer);
+        customerService.save(customer);
+
+        User user = userService.findByUsername(customer.getUsername());
+        user.setPassword(customer.getPassword());
+        userService.save(user);
 
         return "redirect:/customers";
     }

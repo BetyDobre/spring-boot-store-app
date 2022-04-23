@@ -29,7 +29,7 @@ public class JpaUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user;
 
-        Optional<User> userOpt= userRepository.findByUsername(username);
+        Optional<User> userOpt= userRepository.findUserByUsername(username);
         if (userOpt.isPresent())
             user = userOpt.get();
         else
