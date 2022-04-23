@@ -42,13 +42,12 @@ public class CartController {
     @PostMapping("/add")
     public String addDecorationToCart(@RequestParam Long decorationId, @RequestParam int quantity) {
 //        Customer customer = (Customer) ((customernamePasswordAuthenticationToken) principal).getPrincipal();
-        Customer customer = Customer.builder().customerId(1L).build();
-        Customer existingCustomer = customerRepository.save(customer);
+        Customer customer = customerRepository.findCustomerByCustomerId(1L);
         if (quantity <= 0)
             throw new NegativeQuantityException();
         Decoration decoration = decorationService.findDecorationByDecorationId(decorationId);
         OrderItemDto item = new OrderItemDto(quantity, decoration.getPrice(), decorationId);
-        cartService.addDecorationToCart(existingCustomer, item);
+        cartService.addDecorationToCart(customer, item);
 
         return "redirect:/cart/";
     }
@@ -56,7 +55,7 @@ public class CartController {
     @GetMapping()
     public String getCartContent(Principal principal, Model model) {
         //Customer customer = (Customer) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        Customer customer = Customer.builder().customerId(1L).build();
+        Customer customer = customerRepository.findCustomerByCustomerId(1L);
         Cart cart = cartService.findCartByCustomer(customer);
         List<OrderItemDto> cartItems = cartService.getCartContent(customer.getCustomerId());
 
@@ -71,7 +70,7 @@ public class CartController {
     @PostMapping("/delete")
     public String deleteItem(@RequestParam Long decorationId, Principal principal, Model model){
         //Customer customer = (Customer) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        Customer customer = Customer.builder().customerId(1L).build();
+        Customer customer = customerRepository.findCustomerByCustomerId(1L);
 
         Cart cart = cartService.findCartByCustomer(customer);
         List<OrderItemDto> cartItems = cartService.getCartContent(customer.getCustomerId());
@@ -102,8 +101,8 @@ public class CartController {
     }
 
 
-    @PostMapping("/checkout")
-    public ModelAndView orderCheckout(@RequestParam String cardNumber, Principal principal) {
+    @RequestMapping(method=RequestMethod.POST, value = "/checkout")
+    public ModelAndView orderCheckout(@RequestParam String cardNumber) {
         //Customer customer = (Customer) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         Customer customer = customerRepository.findCustomerByCustomerId(1L);
         Optional<Order> order = orderService.createOrder(customer, cartService.getCartItems().get(customer.getCustomerId()), cardNumber);

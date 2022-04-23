@@ -36,7 +36,6 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void deleteById(Long id) {
         Customer customer = customerRepository.findCustomerByCustomerId(id);
-        customer.setRoles(null);
 
         customerRepository.deleteByCustomerId(id);
     }
@@ -46,14 +45,4 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findCustomerByCustomerId(id);
     }
 
-
-//
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        Customer customer = customerRepository.findCustomerByUsername(username);
-//        if(customer == null)
-//            throw new CustomerNotFoundException();
-//
-//        return customer;
-//    }
 }
