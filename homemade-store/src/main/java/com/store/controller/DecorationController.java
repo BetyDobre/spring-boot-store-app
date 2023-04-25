@@ -85,7 +85,6 @@ public class DecorationController {
         Decoration savedDecoration = decorationService.save(decoration);
         imageService.saveImageFile(Long.valueOf(savedDecoration.getDecorationId()), file);
 
-
         return "redirect:/decorations";
     }
 
@@ -104,7 +103,7 @@ public class DecorationController {
 
         log.info("Getting decorations...");
         int currentPage = page.orElse(1);
-        int pageSize = size.orElse(4);
+        int pageSize = size.orElse(6);
         Page<Decoration> decorationPage = decorationService.getDecorationsBy(category, name, order, PageRequest.of(currentPage - 1, pageSize));
         model.addAttribute("decorationPage", decorationPage);
         int totalPages = decorationPage.getTotalPages();

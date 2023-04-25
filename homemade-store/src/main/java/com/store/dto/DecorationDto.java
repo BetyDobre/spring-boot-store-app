@@ -20,7 +20,6 @@ public class DecorationDto {
 
     private Long decorationId;
 
-    @OnlyLetters
     @Size(min = 1, max = 30, message = "Length isn't between 1 and 30")
     private String decorationName;
 

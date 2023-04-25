@@ -23,7 +23,7 @@ public class ImageController {
         this.decorationService = decorationService;
     }
 
-    @GetMapping("decorations/getImage/{id}")
+    @GetMapping("/decorations/getImage/{id}")
     public void downloadImage(@PathVariable Long id, HttpServletResponse response) throws IOException {
         Decoration decoration = decorationService.findDecorationByDecorationId(id);
 
